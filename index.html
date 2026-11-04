@@ -25,6 +25,16 @@
   #status{font-size:13px;margin-top:8px;min-height:18px}
   .ok{color:var(--ok)}.err{color:var(--err)}
   .hidden{display:none}
+
+
+  /* บล็อกเคอร์เซอร์กระพริบและการคลุมดำเลือกข้อความทั้งหมด (ยกเว้นช่องกรอก UID) */
+body *:not(#user-uid):not(input):not(textarea) {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE/Edge */
+    user-select: none;         /* Standard */
+    -webkit-touch-callout: none; /* ป้องกันการกดค้างบนมือถือ */
+}
 </style>
 </head>
 <body>
