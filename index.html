@@ -59,6 +59,7 @@
   <div class="hint">ใส่ลิงก์แล้วผู้รับจะเห็นปุ่ม เปิดลิงก์ ถ้าไม่ใส่จะเห็นแค่ปุ่มลบ</div>
   <button class="primary" style="margin-top:10px" id="sendBtn" onclick="send()">ส่งข้อความ</button>
   <div id="status"></div>
+  <button class="ghost" style="margin-top:14px;width:100%;color:#fff;background:#b91c1c;border-color:#b91c1c" onclick="banUser()">🚫 แบนผู้ใช้นี้ (ลบทิ้งถาวร)</button>
 </div>
 
 <script>
@@ -137,6 +138,24 @@
     document.getElementById('msg').focus();
   }
 
+  async function banUser(){
+    if(!selected) return;
+    if(!confirm('แบน "'+selected+'" ?\nบัญชีจะถูกลบทิ้งถาวร กู้คืนไม่ได้')) return;
+    if(!confirm('ยืนยันอีกครั้ง: ลบ "'+selected+'" ออกจากเว็บเลยนะ')) return;
+    setStatus('กำลังแบน...');
+    try{
+      const r = await rpc('ban_user', { p_api_key: getKey(), p_username: selected });
+      if(!r || r.ok !== true) throw new Error((r && r.error) || 'แบนไม่สำเร็จ');
+      users = users.filter(u => u.username !== selected);
+      alert('แบน '+selected+' เรียบร้อย');
+      selected = null;
+      document.getElementById('composer').classList.add('hidden');
+      renderUsers();
+    }catch(err){
+      setStatus('❌ '+err.message,'err');
+    }
+  }
+
   async function send(){
     const text = document.getElementById('msg').value.trim();
     if(!selected){ return; }
@@ -162,5 +181,4 @@
   if(getKey()){ document.getElementById('key').value = getKey(); }
 </script>
 </body>
-  </html>
-  
+</html>
